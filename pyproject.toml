@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "icebear-site"
+version = "0.1.0"
+description = ""
+authors = ["icebear <969549808@qq.com>"]
+readme = "README.md"
+packages = [{ include = "icebear_site" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.4"
+pydantic = "^2.1.1"
+httpie = "^3.2.2"
+rich = "^13.5.2"
+coverage = "^7.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
