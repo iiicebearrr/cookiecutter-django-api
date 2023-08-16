@@ -1,5 +1,6 @@
-import typing
 import json
+import typing
+
 from django.db.models import Model
 from django.db.models.query import QuerySet
 from django.forms import model_to_dict

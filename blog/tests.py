@@ -2,8 +2,8 @@
 import json
 
 from django.contrib.auth.models import User, AnonymousUser
-from django.test import TestCase, RequestFactory, override_settings
 from django.core.exceptions import PermissionDenied
+from django.test import TestCase, RequestFactory, override_settings
 
 from .models import Blogs
 from .views import BlogsView, BlogsEditView, BlogsDetailView, publish_post
