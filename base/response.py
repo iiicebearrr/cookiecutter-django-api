@@ -1,12 +1,36 @@
 import json
 from typing import Any
 
+from pydantic import BaseModel, Field
+
 from django.core.paginator import Paginator
 from django.db import models
 from django.forms.models import model_to_dict
 from django.http.response import JsonResponse
+from django.conf import settings
 
 from .status_codes import SUCCESS
+
+RESPONSE_CONFIG = settings.DJANGO_REST
+
+
+class ResponseStructure(BaseModel):
+    data: Any = Field(..., serialization_alias=RESPONSE_CONFIG["RESPONSE_DATA_FIELD"])
+    msg: str | None = Field(
+        None, serialization_alias=RESPONSE_CONFIG["RESPONSE_MESSAGE_FIELD"]
+    )
+    code: int = Field(
+        SUCCESS.code, serialization_alias=RESPONSE_CONFIG["RESPONSE_CODE_FIELD"]
+    )
+
+
+class PaginatedResponseStructure(BaseModel):
+    paginated_list: list[Any] = Field(
+        [], serialization_alias=RESPONSE_CONFIG["RESPONSE_PAGINATED_LIST_FIELD"]
+    )
+    count: int = Field(
+        0, serialization_alias=RESPONSE_CONFIG["RESPONSE_PAGINATED_COUNT_FIELD"]
+    )
 
 
 class Response(JsonResponse):
@@ -25,13 +49,16 @@ class Response(JsonResponse):
             case _:
                 return data
 
-    def __init__(self, data: Any, msg: str | None = None, **kwargs):
+    def __init__(
+        self, data: Any, msg: str | None = None, code: int | None = None, **kwargs
+    ):
+        self.response = ResponseStructure(
+            data=self.serialize_model_data(data),
+            msg=msg,
+            code=code or SUCCESS.code,
+        )
         super().__init__(
-            {
-                "data": self.serialize_model_data(data),
-                "msg": msg,
-                "code": SUCCESS.code,
-            },
+            self.response.model_dump(by_alias=True),
             **kwargs,
         )
 
@@ -45,12 +72,17 @@ class PaginatedResponse(Response):
         **kwargs,
     ):
         if paginator is not None and isinstance(paginator, Paginator):
-            super().__init__(
-                {
-                    "list": list(paginator.object_list.values()),
-                    "count": paginator.count,
-                },
-                **kwargs,
+            self.paginate_response = PaginatedResponseStructure(
+                paginated_list=list(paginator.object_list.values()),
+                count=paginator.count,
             )
+
         else:
-            super().__init__({"list": data, "count": count}, **kwargs)
+            self.paginate_response = PaginatedResponseStructure(
+                paginated_list=data or [], count=count
+            )
+
+        super().__init__(
+            data=self.paginate_response.model_dump(by_alias=True),
+            **kwargs,
+        )

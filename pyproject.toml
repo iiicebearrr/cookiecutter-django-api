@@ -13,6 +13,8 @@ pydantic = "^2.1.1"
 httpie = "^3.2.2"
 rich = "^13.5.2"
 coverage = "^7.3.0"
+python-dotenv = "^1.0.0"
+django-environ = "^0.11.2"
 
 
 [build-system]

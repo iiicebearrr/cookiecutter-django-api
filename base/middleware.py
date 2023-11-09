@@ -1,4 +1,3 @@
-import json
 import logging
 from itertools import groupby, chain
 
@@ -6,28 +5,22 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 
-# from django.db.models.query
+
 from pydantic import ValidationError
 
 from . import status_codes
 from .exceptions import CustomException
-
-# from .status_codes import (
-#     UNCAUGHT_EXCEPTION,
-#     FAILED,
-#     PYDANTIC_VALIDATION_ERROR,
-#     OBJECT_NOT_FOUND,
-# )
+from .response import ResponseStructure
 
 logger = logging.getLogger("django")
 
 
-class BaseMiddleware(object):
+class BaseMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
         # One-time configuration and initialization.
 
-    def __call__(self, request: HttpRequest):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         # Code to be executed for each request before
         # the view (and later middleware) are called.
 
@@ -39,31 +32,29 @@ class BaseMiddleware(object):
         return response
 
 
-class ExceptionMiddleware(BaseMiddleware):
-    def __call__(self, *args, **kwargs):
+class JsonMiddleware(BaseMiddleware):
+    def __call__(self, *args, **kwargs) -> HttpResponse:
         response: HttpResponse = super().__call__(*args, **kwargs)
         if response.status_code >= 400:
+            detail = str(response)
+
             msg = status_codes.FAILED.render(
-                {
-                    "status_code": response.status_code,
-                    "msg": str(response),
-                }
+                {"status_code": response.status_code, "msg": detail}
             )
 
             logger.error(msg)
+            r = ResponseStructure(
+                data=None,
+                msg=msg,
+                code=response.status_code,
+            )
             return HttpResponse(
-                json.dumps(
-                    {
-                        "data": None,
-                        "msg": msg,
-                        "code": response.status_code,
-                    }
-                )
+                r.model_dump_json(by_alias=True),
             )
         return response
 
-    def dispatch_exception(self, exception: Exception) -> tuple[str, int]:
-        # TODO: Exception on validation/database constraint/object not found
+    @staticmethod
+    def dispatch_exception(exception: Exception) -> tuple[str, int]:
         # Custom exception raised by views
         if isinstance(exception, CustomException):
             return str(exception), exception.code.code
@@ -85,17 +76,22 @@ class ExceptionMiddleware(BaseMiddleware):
                 )
             return ", ".join(err_msgs), status_codes.PYDANTIC_VALIDATION_ERROR.code
 
+        # TODO: Database constraint violation
+
         # Uncaught exception
         return (
             status_codes.UNCAUGHT_EXCEPTION.render({"msg": str(exception)}),
             status_codes.UNCAUGHT_EXCEPTION.code,
         )
 
-    def process_exception(self, request: HttpRequest, exception: Exception):
+    def process_exception(
+        self, request: HttpRequest, exception: Exception
+    ) -> HttpResponse:
         msg, code = self.dispatch_exception(exception)
         logger.error(msg, exc_info=True)
-        return HttpResponse(json.dumps({"data": None, "msg": msg, "code": code}))
-
-
-class LoggingMiddleware(BaseMiddleware):
-    ...
+        r = ResponseStructure(
+            data=None,
+            msg=msg,
+            code=code,
+        )
+        return HttpResponse(r.model_dump_json(by_alias=True))
