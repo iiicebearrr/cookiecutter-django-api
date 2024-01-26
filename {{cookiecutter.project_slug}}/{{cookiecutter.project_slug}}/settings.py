@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import logging.config
 import logging
 import os
-import environ
 from pathlib import Path
+import environ
 from dotenv import dotenv_values
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -147,19 +147,38 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+LOG_FILE = BASE_DIR / env.str("LOG_FILE", "logs/access.log")
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "rich": {
+            "()": "rich.logging.RichFormatter",
+            "datefmt": "[%X]",
+            "fmt": "%(asctime)s %(name)s %(levelname)s %(message)s",
+        },
+    },
     "handlers": {
         "console": {
-            "level": "INFO",
+            "level": "DEBUG",
             "class": "rich.logging.RichHandler",
+            "formatter": "rich",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.RotatingFileHandler",
+            "filename": str(LOG_FILE),
+            "formatter": "rich",
+            "maxBytes": 1024 * 1024 * 5,
+            "backupCount": 5,
         },
     },
     "loggers": {
         "django": {
-            "handlers": ["console"],
+            "handlers": ["console", "file"],
             "propagate": True,
+            "level": "DEBUG",
         },
     },
 }

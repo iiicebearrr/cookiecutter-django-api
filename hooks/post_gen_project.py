@@ -1,0 +1,1 @@
+# TODO: Move .pre-commit-config.yaml to the root of the project

@@ -1,0 +1,12 @@
+{
+    "project_name": "My App",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+    "version": "0.1.0",
+    "python_version": "3.12",
+    "author_name": "We Three Bears",
+    "author_email": "wethreebears@gmail.com",
+    "add_gh_workflow": "y",
+    "gh_workflow_publish_to_pypi": "n",
+    "pypi_secrets_token_name": "PYPI_TOKEN",
+    "pypi_secrets_name": "${{'{{'}}secrets.{{cookiecutter.pypi_secrets_token_name}}{{'}}'}}"
+}

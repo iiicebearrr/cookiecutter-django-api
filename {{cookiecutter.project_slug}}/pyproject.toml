@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "icebear-site"
-version = "0.1.0"
-description = ""
-authors = ["icebear <969549808@qq.com>"]
+name = "{{cookiecutter.project_name}}"
+version = "{{cookiecutter.version}}"
+description = "{{cookiecutter.description}}"
+authors = ["{{cookiecutter.author_name}} <{{cookiecutter.author_email}}>"]
 readme = "README.md"
-packages = [{ include = "icebear_site" }]
+packages = [{ include = "{{cookiecutter.project_slug}}" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
