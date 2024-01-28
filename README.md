@@ -2,6 +2,8 @@
 
 Powered by [cookiecutter](https://github.com/cookiecutter/cookiecutter). Cookiecutter Django Api is a framework for jumpstarting production-ready Django projects quickly, and focuses on providing a solid foundation for building API-driven projects quickly with Django.
 
+![Example](./docs/demo.svg)
+
 ## Features
 
 - Work with python >= 3.12
@@ -26,5 +28,5 @@ Powered by [cookiecutter](https://github.com/cookiecutter/cookiecutter). Cookiec
 ### Generate project by cookiecutter
 
 ```bash
-cookiecutter gh:iiicebearrr/cookiecutter-django-api.git
+cookiecutter gh:iiicebearrr/cookiecutter-django-api
 ```
