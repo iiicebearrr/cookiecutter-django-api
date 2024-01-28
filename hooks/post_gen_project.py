@@ -32,12 +32,7 @@ def remove_file(filepath: Path | str):
 def replace_secret_key():
     # replace SECRET_KEY in env/.env.base
 
-    env_base = PROJECT_DIRECTORY / "env" / ".env.base"
-
-    # print all files
-    print("Files:")
-    for f in PROJECT_DIRECTORY.glob("**/*"):
-        print(f)
+    env_base = PROJECT_DIRECTORY / "envs" / ".env.base"
 
     with env_base.open("a") as f:
         f.write(f"\nSECRET_KEY={DJANGO_SECRET_KEY}\n")

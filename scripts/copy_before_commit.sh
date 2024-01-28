@@ -3,6 +3,7 @@
 cp .pre-commit-config-for-gen.yaml {{cookiecutter.project_slug}}/.pre-commit-config.yaml
 cp poetry.lock {{cookiecutter.project_slug}}/poetry.lock
 cp requirements.txt {{cookiecutter.project_slug}}/requirements.txt
+cp .gitignore {{cookiecutter.project_slug}}/.gitignore
 
 rm -f {{cookiecutter.project_slug}}/pyproject.toml
 

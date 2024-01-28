@@ -21,7 +21,7 @@ from dotenv import dotenv_values
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ENV_DIR = BASE_DIR / "env"
+ENV_DIR = BASE_DIR / "envs"
 
 ENV_DIR.mkdir(exist_ok=True)
 
