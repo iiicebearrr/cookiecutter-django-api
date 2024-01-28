@@ -35,4 +35,4 @@ jobs:
 
       - name: Run tests
         run: |
-          bash tests/test_generation.sh
+          bash scripts/test_generation.sh
