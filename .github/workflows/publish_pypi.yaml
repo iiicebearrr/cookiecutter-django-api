@@ -24,4 +24,4 @@ jobs:
           poetry config repositories.pypi https://upload.pypi.org/legacy/
           poetry config pypi-token.pypi {{cookiecutter.pypi_secrets_name}}
           poetry build
-          poetry publish 
+          poetry publish

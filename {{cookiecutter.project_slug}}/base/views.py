@@ -1,21 +1,20 @@
 import json
 import typing
+from functools import cached_property
 
 from django.db.models import Model
 from django.db.models.query import QuerySet
 from django.forms import model_to_dict
-from django.views import generic, View
 from django.http import HttpRequest
-from functools import cached_property
-
+from django.views import View, generic
 from pydantic import BaseModel
 
 from .filter_backends import (
-    QueryParamsFilterBackend,
     BodyParamsFilterBackend,
     FilterBackendBase,
+    QueryParamsFilterBackend,
 )
-from .response import Response, PaginatedResponse
+from .response import PaginatedResponse, Response
 
 
 class ListView(generic.ListView):

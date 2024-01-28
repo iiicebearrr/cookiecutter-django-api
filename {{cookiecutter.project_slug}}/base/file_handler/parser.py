@@ -1,10 +1,11 @@
 import abc
+from functools import cached_property
+from typing import Iterable
+
 import requests
-from typing import BinaryIO, Iterable
+from django.core.files.base import File
 from django.http import HttpRequest
 from pydantic import HttpUrl
-from django.core.files.base import File
-from functools import cached_property
 
 
 class BaseFileParser(abc.ABC):

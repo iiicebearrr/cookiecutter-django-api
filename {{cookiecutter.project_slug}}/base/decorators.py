@@ -2,11 +2,11 @@ import json
 from functools import wraps
 
 from django.conf import settings
-from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.models import AnonymousUser, User
 from django.core.exceptions import PermissionDenied
 from django.http.request import HttpRequest
 
-from .exceptions import QueryParameterMissing, BodyParameterMissing
+from .exceptions import BodyParameterMissing, QueryParameterMissing
 
 
 def _get_request(*args) -> HttpRequest:

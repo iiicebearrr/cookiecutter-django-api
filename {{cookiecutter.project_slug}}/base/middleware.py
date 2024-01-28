@@ -1,18 +1,16 @@
 import logging
-from itertools import groupby, chain
+from itertools import chain, groupby
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
-
-
 from pydantic import ValidationError
 
 from . import status_codes
 from .exceptions import CustomException
 from .response import ResponseStructure
 
-logger = logging.getLogger("django")
+logger = logging.getLogger("default")
 
 
 class BaseMiddleware:
@@ -36,7 +34,7 @@ class JsonMiddleware(BaseMiddleware):
     def __call__(self, *args, **kwargs) -> HttpResponse:
         response: HttpResponse = super().__call__(*args, **kwargs)
         if response.status_code >= 400:
-            detail = str(response)
+            detail = response.reason_phrase
 
             msg = status_codes.FAILED.render(
                 {"status_code": response.status_code, "msg": detail}

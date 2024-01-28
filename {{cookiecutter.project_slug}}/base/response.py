@@ -1,13 +1,12 @@
 import json
 from typing import Any
 
-from pydantic import BaseModel, Field
-
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.db import models
 from django.forms.models import model_to_dict
 from django.http.response import JsonResponse
-from django.conf import settings
+from pydantic import BaseModel, Field
 
 from .status_codes import SUCCESS
 

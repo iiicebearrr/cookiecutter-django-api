@@ -1,8 +1,7 @@
 import abc
-import requests
-from typing import BinaryIO, Any
+from typing import Any
+
 from pydantic import HttpUrl
-from tempfile import TemporaryFile
 
 
 class Uploader(abc.ABC):

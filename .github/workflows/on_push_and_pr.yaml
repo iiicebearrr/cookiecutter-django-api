@@ -35,4 +35,4 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run python -m unittest discover -s tests
+          bash tests/test_generation.sh

@@ -10,10 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import logging.config
 import logging
+import logging.config
 import os
 from pathlib import Path
+
 import environ
 from dotenv import dotenv_values
 
@@ -22,13 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 ENV_DIR = BASE_DIR / "env"
 
+ENV_DIR.mkdir(exist_ok=True)
+
 DOTENV = BASE_DIR / ".env"
 
 BASE_DOTENV = ENV_DIR / ".env.base"
 
 PROJECT_ENV_KEY = "PROJECT_ENV"
 
-PROJECT_ENV = os.environ.get(PROJECT_ENV_KEY, "default")
+PROJECT_ENV = os.environ.get(PROJECT_ENV_KEY, "local")
 
 
 def merge_env():
@@ -69,7 +72,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-] + env.list("INSTALLED_APPS")
+    {%- if cookiecutter.add_example_app %}
+    "example_app",
+    {%- endif %}
+]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -82,7 +88,7 @@ MIDDLEWARE = [
     "base.middleware.JsonMiddleware",
 ]
 
-ROOT_URLCONF = "application.urls"
+ROOT_URLCONF = "{{cookiecutter.project_slug}}.urls"
 
 TEMPLATES = [
     {
@@ -100,7 +106,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "application.wsgi.application"
+WSGI_APPLICATION = "{{cookiecutter.project_slug}}.wsgi.application"
 
 
 # Database
@@ -147,39 +153,35 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOG_FILE = BASE_DIR / env.str("LOG_FILE", "logs/access.log")
+LOG_DIR = BASE_DIR / env.str("LOG_DIR", "logs")
+
+LOG_DIR.mkdir(exist_ok=True)
+
+LOG_FILE = LOG_DIR / env.str("LOG_FILE", "access.log")
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "formatters": {
-        "rich": {
-            "()": "rich.logging.RichFormatter",
-            "datefmt": "[%X]",
-            "fmt": "%(asctime)s %(name)s %(levelname)s %(message)s",
-        },
-    },
     "handlers": {
         "console": {
             "level": "DEBUG",
             "class": "rich.logging.RichHandler",
-            "formatter": "rich",
         },
         "file": {
             "level": "INFO",
-            "class": "logging.RotatingFileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "filename": str(LOG_FILE),
-            "formatter": "rich",
             "maxBytes": 1024 * 1024 * 5,
             "backupCount": 5,
         },
     },
     "loggers": {
-        "django": {
+
+        "default": {
             "handlers": ["console", "file"],
             "propagate": True,
-            "level": "DEBUG",
-        },
+            "level": "DEBUG" if DEBUG else "INFO",
+        }
     },
 }
 
