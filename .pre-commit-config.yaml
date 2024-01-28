@@ -25,12 +25,4 @@ repos:
     rev: 5.13.2  # Use the latest version
     hooks:
       - id: isort
-  # Run scripts/copy_before_commit.sh
-  - repo: local
-    hooks:
-      - id: copy-before-commit
-        name: Copy before commit
-        entry: scripts/copy_before_commit.sh
-        language: script
-        types: [python]
-        pass_filenames: false
+
