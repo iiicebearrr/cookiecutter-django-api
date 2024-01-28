@@ -10,6 +10,8 @@ set -x
 mkdir -p .cache/bare
 cd .cache/bare
 
+pip install cookiecutter
+
 cookiecutter ../../ --no-input --overwrite-if-exists "$@"
 
 cd my_django_project

@@ -23,5 +23,5 @@ jobs:
         with:
           python-version: "3.12"
       - name: Test generation
-        run: |
+        run: |  
           bash scripts/test_generation.sh
