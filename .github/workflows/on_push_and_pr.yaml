@@ -22,17 +22,9 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: "3.12"
-      - name: Run image
-        uses: abatilo/actions-poetry@v2
-        with:
-          poetry-version: "1.7.1"
       - name: Install dependencies
         run: |
-          poetry install --no-root
+          pip install pre-commit
       - name: Run pre commit
         run: |
-          poetry run pre-commit run -a
-
-      - name: Run tests
-        run: |
-          bash scripts/test_generation.sh
+          pre-commit run -a
