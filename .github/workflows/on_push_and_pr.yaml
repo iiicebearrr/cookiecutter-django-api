@@ -28,7 +28,7 @@ jobs:
           poetry-version: "1.7.1"
       - name: Install dependencies
         run: |
-          poetry install
+          poetry install --no-root
       - name: Run pre commit
         run: |
           poetry run pre-commit run -a

@@ -1,27 +1,26 @@
 [tool.poetry]
-name = "icebear-site"
+name = "cookiecutter-django-api"
 version = "0.1.0"
 description = ""
-authors = ["icebear <969549808@qq.com>"]
+authors = ["iiicebearrr <110714291+iiicebearrr@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{ include = "icebear_site" }]
+packages = [{include = "cookiecutter_django_api"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
-django = "^4.2.4"
-pydantic = "^2.1.1"
-httpie = "^3.2.2"
-rich = "^13.5.2"
-coverage = "^7.3.0"
-python-dotenv = "^1.0.0"
-django-environ = "^0.11.2"
+python = "^3.12"
+django = "^5.0.1"
+pydantic = "^2.5.3"
+rich = "^13.7.0"
 environs = "^10.3.0"
+dj-database-url = "^2.1.0"
 
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.6.0"
 ruff = "^0.1.14"
 isort = "^5.13.2"
+httpie = "^3.2.2"
+coverage = "^7.4.1"
 
 [build-system]
 requires = ["poetry-core"]

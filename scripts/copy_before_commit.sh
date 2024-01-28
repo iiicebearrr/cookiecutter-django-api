@@ -1,11 +1,4 @@
 #!/bin/sh
-# this is a very simple script that tests the docker configuration for cookiecutter-django
-# it is meant to be run from the root directory of the repository, eg:
-# sh tests/test_bare.sh
-
-set -o errexit
-set -x
-
 # Copy dependencies file to the project cookiecutter template folder
 cp .pre-commit-config-for-gen.yaml {{cookiecutter.project_slug}}/.pre-commit-config.yaml
 cp poetry.lock {{cookiecutter.project_slug}}/poetry.lock
@@ -26,16 +19,3 @@ packages = [{ include = "{{cookiecutter.project_slug}}" }]
 
 
 ' {{cookiecutter.project_slug}}/pyproject.toml
-# create a cache directory
-mkdir -p .cache/bare
-cd .cache/bare
-
-cookiecutter ../../ --no-input --overwrite-if-exists "$@"
-
-cd my_django_project
-
-# Install Python deps
-pip install -r requirements.txt
-
-# Make sure the check doesn't raise any warnings
-python manage.py check --fail-level WARNING

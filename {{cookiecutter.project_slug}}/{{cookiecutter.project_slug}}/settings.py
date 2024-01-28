@@ -15,7 +15,7 @@ import logging.config
 import os
 from pathlib import Path
 
-import environ
+from environs import Env
 from dotenv import dotenv_values
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,8 +47,8 @@ def merge_env():
 
 
 merge_env()
-env = environ.Env()
-environ.Env.read_env(DOTENV)
+env = Env()
+env.read_env(DOTENV)
 
 
 # Quick-start development settings - unsuitable for production
@@ -113,7 +113,7 @@ WSGI_APPLICATION = "{{cookiecutter.project_slug}}.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-DATABASES = {"default": env.db_url()}
+DATABASES = {"default": env.dj_db_url("DATABASE_URL")}
 
 
 # Password validation
