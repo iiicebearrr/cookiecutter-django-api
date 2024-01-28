@@ -6,8 +6,6 @@
 set -o errexit
 set -x
 
-bash scripts/copy_before_commit.sh
-
 # create a cache directory
 mkdir -p .cache/bare
 cd .cache/bare
