@@ -34,6 +34,11 @@ def replace_secret_key():
 
     env_base = PROJECT_DIRECTORY / "env" / ".env.base"
 
+    # print all files
+    print("Files:")
+    for f in PROJECT_DIRECTORY.glob("**/*"):
+        print(f)
+
     with env_base.open("a") as f:
         f.write(f"\nSECRET_KEY={DJANGO_SECRET_KEY}\n")
 
